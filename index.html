@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>TÁNGER · SECRET MISSIONS V2</title>
+<title>TÁNGER · MISIÓN SECRETA</title>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
 :root{--bg:#090b10;--card:#121722;--card2:#171d29;--text:#f5f6f8;--muted:#9da6b5;--gold:#e8b85a;--red:#e85d5d;--green:#62d39a;--blue:#70a7ff;--line:#293142}
-*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top,#182033 0,#090b10 46%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+*{box-sizing:border-box} body{margin:0;background-color:#06034d;background-image:linear-gradient(45deg,transparent 46%,rgba(217,164,65,.12) 47%,rgba(217,164,65,.12) 53%,transparent 54%),linear-gradient(-45deg,transparent 46%,rgba(217,164,65,.12) 47%,rgba(217,164,65,.12) 53%,transparent 54%);background-size:70px 70px;color:var(--text);;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
 button,input{font:inherit} button{cursor:pointer;border:0}.wrap{max-width:900px;margin:auto;padding:22px 16px 70px}.logo{text-align:center;letter-spacing:.2em;font-weight:900;font-size:13px;color:var(--gold)}h1{font-size:clamp(32px,8vw,64px);line-height:.95;margin:10px 0;text-align:center;letter-spacing:-.05em}h2{margin:0 0 8px}h3{margin:0 0 7px}.sub{text-align:center;color:var(--muted);max-width:620px;margin:0 auto 25px}.panel{background:rgba(18,23,34,.9);border:1px solid var(--line);border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 18px 50px #0005}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.role{padding:18px;border:1px solid var(--line);background:var(--card2);border-radius:18px;text-align:left}.role b{font-size:21px}.role small{display:block;color:var(--muted);margin-top:5px}.btn{background:var(--gold);color:#17120a;padding:12px 16px;border-radius:12px;font-weight:850}.btn.secondary{background:#242c3b;color:var(--text)}.btn.danger{background:var(--red);color:#fff}.btn.success{background:var(--green);color:#07130d}.btn.blue{background:var(--blue);color:#08111f}.btn:disabled{opacity:.4;cursor:not-allowed}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row .fit{flex:0 0 auto}.field{width:100%;background:#0c111a;border:1px solid var(--line);color:#fff;padding:13px 14px;border-radius:12px;outline:none}.field:focus{border-color:var(--gold)}.code{font-size:34px;font-weight:900;letter-spacing:.18em;text-align:center;color:var(--gold);padding:8px}.tabs{display:flex;gap:8px;overflow:auto;margin:14px 0}.tab{white-space:nowrap;background:#171d29;color:var(--muted);padding:10px 13px;border-radius:999px;border:1px solid var(--line)}.tab.active{background:var(--gold);color:#17120a;font-weight:800}.mission{border:1px solid var(--line);background:linear-gradient(145deg,#151b27,#0f141e);border-radius:18px;padding:17px;margin:11px 0}.mission.active{border-color:#8d7135}.mission.done{border-color:#347e5d}.mission.pending{border-color:#6d5e28}.mission.locked{opacity:.58}.badge{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.08em;padding:5px 8px;border-radius:999px;background:#252d3b;color:#b9c1cf;margin-bottom:9px}.badge.gold{background:#3b301c;color:#f2cc77}.badge.green{background:#183528;color:#79e0a8}.badge.red{background:#3b1e22;color:#ff9b9b}.pts{float:right;color:var(--gold);font-weight:900}.mission p{color:#c4cad5;line-height:1.5}.hint{font-size:13px;color:var(--muted);line-height:1.45}.score{font-size:34px;font-weight:950;color:var(--gold)}.playerline{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.playerline:last-child{border:0}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--muted);margin-right:7px}.dot.on{background:var(--green);box-shadow:0 0 10px #62d39a}.feed{max-height:260px;overflow:auto}.event{padding:9px 0;border-bottom:1px solid #202737;font-size:14px}.event small{color:var(--muted)}.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#f5f6f8;color:#0a0d12;padding:12px 16px;border-radius:14px;font-weight:750;z-index:50;box-shadow:0 12px 40px #0008;display:none;max-width:90%}.hidden{display:none!important}.mini{font-size:12px;color:var(--muted)}.dangerbox{background:#28171a;border:1px solid #633136;padding:13px;border-radius:14px}.reveal{background:linear-gradient(145deg,#2a2111,#15120d);border-color:#6c5526}.missionlist{font-size:13px;color:#cbd0da}.missionlist li{margin:6px 0}.center{text-align:center}.sep{height:1px;background:var(--line);margin:18px 0}
 @media(max-width:600px){.wrap{padding:18px 12px 60px}.panel{padding:16px;border-radius:18px}.row{flex-direction:column;align-items:stretch}.row .fit{width:100%}.btn{width:100%}.code{font-size:29px}}
 </style>
@@ -21,27 +21,27 @@ button,input{font:inherit} button{cursor:pointer;border:0}.wrap{max-width:900px;
 <script>
 const GAME_CONFIG = {
   title:"TÁNGER",
-  subtitle:"SECRET MISSIONS · V2",
+  subtitle:"MISIÓN SECRETA",
   players:{
-    Felipe:{emoji:"🕶️",missions:[
-      ["F1","THE DISTRACTION","Consigue que Adrián deje su móvil sobre una mesa y se aleje al menos 30 segundos. No lo toques, escondas ni mires.","3"],
-      ["F2","THE PHOTOGRAPHER","Consigue que Adrián pose para una foto exactamente como tú quieres, sin darle una orden directa ni decir que es una misión.","3"],
-      ["F3","THE DOUBLE AGENT","Haz que Adrián acuse espontáneamente a Iris de estar detrás de una conspiración del viaje. Tú no puedes acusarla directamente.","5"],
-      ["F4","THE EXPLORER","En las Cuevas de Hércules, consigue una foto épica de explorador con Adrián. No puedes decirle que forma parte del juego.","3"],
-      ["F5","THE NEGOTIATOR","Consigue que el grupo cambie de plan una vez porque tú has presentado una alternativa convincente, sin decir que ese era tu objetivo.","4"],
-      ["F6","THE DECOY","Haz que Adrián crea durante al menos 2 minutos que has entendido mal una instrucción importante del grupo. Luego corrígelo.","4"],
-      ["F7","THE REVEAL","Antes del final, escribe cuál crees que es la misión principal de Adrián y cuál la de Iris.","6"]
+    Felipe:{emoji:"🦞",missions:[
+      ["F1","LA DISTRACCIÓN","Consigue que Adrián deje su móvil sobre una mesa y se aleje al menos 30 segundos. SÁCATE MÍNIMO 10 FOTOS DURANTE ESE TIEMPO.","3"],
+      ["F2","EL MODELO","Consigue que Adrián pose para una foto exactamente como tú quieres, sin darle una orden directa ni decir que es una misión.","3"],
+      ["F3","PIENSA UN POCO","Haz que Adrián acuse espontáneamente a Iris de estar detrás de una conspiración del viaje. Tú no puedes acusarla directamente.","5"],
+      ["F4","LOS EXPLORADORES","En las Cuevas de Hércules, consigue una foto épica de explorador con Adrián. No puedes decirle que forma parte del juego.","3"],
+      ["F5","NEGOCIOS","Consigue que el grupo cambie de plan una vez porque tú has presentado una alternativa convincente, sin decir que ese era tu objetivo. Ten en cuenta que Iris (yo) es muy lista, jeje","4"],
+      ["F6","ES FILIPINO","Haz que Adrián crea durante al menos 2 minutos que has entendido mal una instrucción importante del grupo. Luego corrígelo.","4"],
+      ["F7","LA REVELACIÓN","Antes del final, escribe cuál crees que es la misión principal de Adrián y cuál la de Iris.","6"]
     ]},
-    Adrián:{emoji:"🧿",missions:[
-      ["A1","THE LOCAL","En una conversación natural, consigue que un local diga espontáneamente que Felipe parece filipino, asiático, o pregunte por su origen. No puedes pagar, presionar ni dictar la frase.","4"],
-      ["A2","THE SABOTEUR","Consigue que Felipe cambie de opinión sobre dónde comer y acepte una propuesta tuya sin saber que ese era tu objetivo.","3"],
-      ["A3","THE TEA","Consigue que Felipe te invite voluntariamente a tomar un té, sin pedirle directamente que pague por ti.","4"],
-      ["A4","THE DIRECTOR","Consigue que Iris haga una pose concreta para una foto sin decirle que es una misión.","3"],
-      ["A5","THE MYSTERY TOURIST","Haz que Felipe o Iris pregunte a un desconocido por una recomendación que tú ya hayas decidido previamente. Tú no puedes formular la pregunta.","4"],
-      ["A6","THE CONFIDENCE","Consigue que Felipe te siga durante al menos 3 minutos hacia un sitio que tú hayas elegido, sin decirle que es una misión ni usar autoridad falsa.","4"],
+    Adrián:{emoji:"🐢",missions:[
+      ["A1","EL MÁS LOCAL","En una conversación natural, consigue que un local diga espontáneamente que Felipe parece filipino, asiático, o pregunte por su origen. No puedes pagar, presionar ni dictar la frase.","4"],
+      ["A2","SABOTAJE","Consigue que Felipe cambie de opinión sobre dónde comer y acepte una propuesta tuya sin saber que ese era tu objetivo.","3"],
+      ["A3","CITA ROMÁNTICA","Consigue que Felipe te invite voluntariamente a tomar un té, sin pedirle directamente que pague por ti.","4"],
+      ["A4","MODELO","Consigue que Iris haga una pose concreta para una foto sin decirle que es una misión.","3"],
+      ["A5","RECOMENDACIÓN","Haz que Felipe o Iris pregunte a un desconocido por una recomendación que tú ya hayas decidido previamente. Tú no puedes formular la pregunta.","4"],
+      ["A6","PERDIDOS","Consigue que Felipe te siga durante al menos 3 minutos hacia un sitio que ni tú sepas a dónde vamos. Si alguien te pregunta a dónde vamos exactamente, ignóralos.","4"],
       ["A7","THE REVEAL","Antes del final, escribe cuál crees que es la misión principal de Felipe y cuál la de Iris.","6"]
     ]},
-    Iris:{emoji:"👑",missions:[
+    Iris:{emoji:"🐠",missions:[
       ["I1","THE MASTERPLAN","Asegúrate de que el grupo llega al primer destino y al siguiente punto importante sin retrasos graves, pero sin parecer la directora del viaje.","4"],
       ["I2","THE SHEPHERD","Consigue que Felipe y Adrián estén juntos en el lugar que necesitas en el momento adecuado, sin darles una orden directa.","3"],
       ["I3","THE CHAOS MANAGER","Durante 30 minutos, haz que Felipe y Adrián crean que tú no sabes qué está pasando con las misiones de los demás.","5"],
