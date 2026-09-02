@@ -162,6 +162,7 @@ function missionCard(role,m,index,hostView=false){
    <span class="badge ${status[0]}">${status[1]}</span><span class="pts">+${m[3]} pts</span>
    <h3>${esc(m[1])}</h3>
    <p>${esc(m[2])}</p>
+   ${role==="Felipe" && id==="F2" ? `<img src="felipe-pose.png" alt="Referencia secreta" style="width:100%;max-width:420px;display:block;margin:14px auto 4px;border-radius:14px;border:1px solid var(--gold);">` : ""}
    ${locked&&!hostView?`<div class="hint">🔒 Se desbloquea cuando Iris avance la ronda.</div>`:
      done?`<div class="hint">✅ Punto conseguido.</div>`:
      pending?`<div class="hint">⏳ Iris tiene que aprobarla.</div>`:
