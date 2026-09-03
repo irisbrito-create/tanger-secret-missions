@@ -136,22 +136,177 @@ function handleComplete(role,id,c){
   broadcast();renderHost();
 }
 function joinAs(role){
- const code=(document.getElementById("joincode")?.value||"").trim().toUpperCase();
- if(code.length!==6){toast("Escribe el código de 6 letras.");return}
- state.role=role;state.host=false;state.room=code;
- state.peer=new Peer();
- state.peer.on("open",()=>{
-   state.conn=state.peer.connect("tanger-"+code.toLowerCase(),{reliable:true});
-   state.conn.on("open",()=>{state.connected=true;state.conn.send({type:"join",role});saveLocal();renderGuest();toast("Conectado. Que empiece el caos.");});
-   state.conn.on("data",data=>{
-     if(data.type==="state"){Object.assign(state,{players:data.state.players,pending:data.state.pending,accusations:data.state.accusations,log:data.state.log,round:data.state.round,revealed:data.state.revealed});renderGuest();}
-     if(data.type==="ack")toast(data.msg);
-     if(data.type==="surprise"){toast(data.text);}
-   });
-   state.conn.on("close",()=>{state.connected=false;toast("Se perdió la conexión con Iris.");});
- });
- state.peer.on("error",e=>{console.error(e);toast("No encuentro esa partida. Comprueba el código.");});
+  const code=(document.getElementById("joincode")?.value||"").trim().toUpperCase();
+
+  if(code.length!==6){
+    toast("Escribe el código de 6 letras.");
+    return;
+  }
+
+  state.role=role;
+  state.host=false;
+  state.room=code;
+
+  // Mostrar inmediatamente que estamos intentando conectar
+  app.innerHTML=`
+    <div class="panel center">
+      <h2>🔌 Conectando...</h2>
+      <p class="hint">
+        Entrando como <b>${GAME_CONFIG.players[role].emoji} ${role}</b>
+      </p>
+      <p class="hint">Código: <b>${code}</b></p>
+      <p class="hint">Espera unos segundos...</p>
+    </div>
+  `;
+
+  try{
+    state.peer=new Peer();
+
+    // Si PeerJS consigue conectarse a su servidor
+    state.peer.on("open",()=>{
+      console.log("PeerJS abierto:",state.peer.id);
+
+      state.conn=state.peer.connect(
+        "tanger-"+code.toLowerCase(),
+        {reliable:true}
+      );
+
+      if(!state.conn){
+        app.innerHTML=`
+          <div class="panel center">
+            <h2>❌ No se pudo conectar</h2>
+            <p class="hint">No se pudo crear la conexión con Iris.</p>
+            <button class="btn" onclick="reset()">Volver a intentar</button>
+          </div>
+        `;
+        return;
+      }
+
+      state.conn.on("open",()=>{
+        console.log("Conectado con Iris");
+
+        state.connected=true;
+
+        state.conn.send({
+          type:"join",
+          role:role
+        });
+
+        saveLocal();
+        renderGuest();
+
+        toast("¡Conectado! Que empiece el caos. 🤫");
+      });
+
+      state.conn.on("data",data=>{
+        console.log("Datos recibidos:",data);
+
+        if(data.type==="state"){
+          Object.assign(state,{
+            players:data.state.players,
+            pending:data.state.pending,
+            accusations:data.state.accusations,
+            log:data.state.log,
+            round:data.state.round,
+            revealed:data.state.revealed
+          });
+
+          renderGuest();
+        }
+
+        if(data.type==="ack"){
+          toast(data.msg);
+        }
+
+        if(data.type==="surprise"){
+          toast(data.text);
+        }
+      });
+
+      state.conn.on("close",()=>{
+        state.connected=false;
+
+        app.innerHTML=`
+          <div class="panel center">
+            <h2>⚠️ Conexión perdida</h2>
+            <p class="hint">
+              Se ha perdido la conexión con Iris.
+            </p>
+            <button class="btn" onclick="reset()">Volver a intentar</button>
+          </div>
+        `;
+
+        toast("Se perdió la conexión con Iris.");
+      });
+
+      state.conn.on("error",e=>{
+        console.error("Error de conexión:",e);
+
+        app.innerHTML=`
+          <div class="panel center">
+            <h2>❌ Error de conexión</h2>
+            <p class="hint">
+              No hemos podido conectar con la partida de Iris.
+            </p>
+            <p class="hint">
+              Comprueba el código <b>${code}</b> y que Iris tenga la partida abierta.
+            </p>
+            <button class="btn" onclick="reset()">Intentar de nuevo</button>
+          </div>
+        `;
+      });
+    });
+
+    // Error al conectar con PeerJS
+    state.peer.on("error",e=>{
+      console.error("PeerJS error:",e);
+
+      app.innerHTML=`
+        <div class="panel center">
+          <h2>❌ No se pudo conectar</h2>
+          <p class="hint">
+            Error de conexión con el servidor.
+          </p>
+          <p class="hint">
+            Código de partida: <b>${code}</b>
+          </p>
+          <p class="hint">
+            Error: <b>${e.type||"desconocido"}</b>
+          </p>
+          <button class="btn" onclick="reset()">Intentar de nuevo</button>
+        </div>
+      `;
+
+      toast("Error de conexión.");
+    });
+
+    // Si se desconecta del servidor de señalización
+    state.peer.on("disconnected",()=>{
+      console.warn("PeerJS desconectado");
+
+      try{
+        state.peer.reconnect();
+      }catch(e){
+        console.error("No se pudo reconectar:",e);
+      }
+    });
+
+  }catch(e){
+    console.error("Error creando Peer:",e);
+
+    app.innerHTML=`
+      <div class="panel center">
+        <h2>❌ Error</h2>
+        <p class="hint">
+          No se pudo iniciar la conexión.
+        </p>
+        <p class="hint">${e.message||e}</p>
+        <button class="btn" onclick="reset()">Volver a intentar</button>
+      </div>
+    `;
+  }
 }
+
 function reset(){try{state.peer&&state.peer.destroy()}catch(e){}location.reload();}
 function missionCard(role,m,index,hostView=false){
  const id=m[0], done=(state.players[role]?.completed||[]).includes(id), pending=(state.players[role]?.pending||[]).includes(id);
