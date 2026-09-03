@@ -125,6 +125,20 @@ function startHost(role){
   });
   state.peer.on("error",e=>{console.error(e);toast("No se pudo crear la partida. Prueba otra vez.");});
 }
+  state.peer.on("disconnected",()=>{
+  console.warn("PeerJS del Game Master se ha desconectado. Reconectando...");
+
+  toast("Reconectando la partida...");
+
+  setTimeout(()=>{
+    try{
+      state.peer.reconnect();
+    }catch(e){
+      console.error("No se pudo reconectar:",e);
+      toast("No se pudo reconectar la partida.");
+    }
+  },1000);
+});
 function handleComplete(role,id,c){
   if(!state.players[role])return;
   const already=(state.players[role].completed||[]).includes(id);
@@ -240,23 +254,30 @@ function joinAs(role){
       });
 
       state.conn.on("error",e=>{
-        console.error("Error de conexión:",e);
+  console.error("Error de conexión:",e);
 
-        app.innerHTML=`
-          <div class="panel center">
-            <h2>❌ Error de conexión</h2>
-            <p class="hint">
-              No hemos podido conectar con la partida de Iris.
-            </p>
-            <p class="hint">
-              Comprueba el código <b>${code}</b> y que Iris tenga la partida abierta.
-            </p>
-            <button class="btn" onclick="reset()">Intentar de nuevo</button>
-          </div>
-        `;
-      });
-    });
+  let mensaje="No hemos podido conectar con Iris.";
 
+  if(e && e.type==="peer-unavailable"){
+    mensaje="No encuentro la partida de Iris. Iris debe recargar la página y crear/abrir la partida de nuevo.";
+  }
+
+  app.innerHTML=`
+    <div class="panel center">
+      <h2>❌ Error de conexión</h2>
+      <p class="hint">${mensaje}</p>
+      <p class="hint">
+        Código de partida: <b>${code}</b>
+      </p>
+      <p class="hint">
+        Código técnico: <b>${e?.type||"desconocido"}</b>
+      </p>
+      <button class="btn" onclick="reset()">Intentar de nuevo</button>
+    </div>
+  `;
+});
+
+    
     // Error al conectar con PeerJS
     state.peer.on("error",e=>{
       console.error("PeerJS error:",e);
